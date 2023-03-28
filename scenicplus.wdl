@@ -27,7 +27,7 @@ task scenic_plus {
         Int disk_space = 128
     }
 
-    command {
+    command <<<
         set -e
 
         mkdir tmp
@@ -96,7 +96,7 @@ task scenic_plus {
 
         tar -czvf scenic_plus_output.tar.gz PDAC_scenic_plus_output
         gsutil rsync -r PDAC_scenic_plus_output ~{output_dir}
-    }
+    >>>
 
     output {
         File scenic_plus_output = 'scenic_plus_output.tar.gz'
