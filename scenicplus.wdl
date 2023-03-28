@@ -12,7 +12,6 @@ task scenic_plus {
     input {
         String output_dir # gbucket
         File tf_file
-        String path_to_bed
         String biomart_host
 
         File adata_file
