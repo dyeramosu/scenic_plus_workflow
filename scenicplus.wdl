@@ -75,7 +75,7 @@ task scenic_plus {
                 species = 'hsapiens',
                 assembly = 'hg38',
                 tf_file = '~{tf_file}',
-                save_path = os.path.join('PDAC_scenic_plus_output'),
+                save_path = 'PDAC_scenic_plus_output_wdl',
                 biomart_host = '~{biomart_host}',
                 upstream = [1000, 150000],
                 downstream = [1000, 150000],
