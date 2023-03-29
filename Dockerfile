@@ -29,7 +29,7 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.c
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN python -m pip install --upgrade pip --no-cache-dir && \
-    python -m pip install scanpy pandas numpy dill pyranges --no-cache-dir
+    python -m pip install scanpy pandas numpy scipy dill pyranges --no-cache-dir
 
 RUN wget https://github.com/macs3-project/MACS/archive/refs/tags/v2.2.7.1.tar.gz -O MACS.tar.gz && \
     tar -xvf MACS.tar.gz && \
