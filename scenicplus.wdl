@@ -30,7 +30,7 @@ task scenic_plus {
         set -e
 
         mkdir tmp
-        mkdir PDAC_scenic_plus_output
+        mkdir PDAC_scenic_plus_output_wdl
 
         python << CODE
         #imports
@@ -88,13 +88,13 @@ task scenic_plus {
                 _temp_dir = 'tmp')
         except Exception as e:
             #in case of failure, still save the object
-            dill.dump(scplus_obj, open(os.path.join('PDAC_scenic_plus_output', 'scplus_obj.pkl'), 'wb'), protocol=-1)
+            dill.dump(scplus_obj, open(os.path.join('PDAC_scenic_plus_output_wdl', 'scplus_obj.pkl'), 'wb'), protocol=-1)
             raise(e)
 
         CODE
 
-        tar -czvf scenic_plus_output.tar.gz PDAC_scenic_plus_output
-        gsutil rsync -r PDAC_scenic_plus_output ~{output_dir}
+        tar -czvf scenic_plus_output.tar.gz PDAC_scenic_plus_output_wdl
+        gsutil rsync -r PDAC_scenic_plus_output_wdl ~{output_dir}
     >>>
 
     output {
