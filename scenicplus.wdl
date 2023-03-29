@@ -98,7 +98,7 @@ task scenic_plus {
     >>>
 
     output {
-        File scenic_plus_output = 'scenic_plus_output.tar.gz'
+        File scenic_plus_output = 'scenic_plus_output_wdl.tar.gz'
     }
 
     runtime {
