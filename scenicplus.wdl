@@ -39,6 +39,7 @@ task scenic_plus {
         import scanpy as sc
         import pyranges as pr
 
+        import scipy
         import pickle
         import dill
         import os
