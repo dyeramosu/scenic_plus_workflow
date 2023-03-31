@@ -51,21 +51,6 @@ task scenic_plus {
         _stderr = sys.stderr   
         null = open(os.devnull,'wb')
 
-        #get input objects
-        #adata = sc.read_h5ad('~{adata_file}')
-        #cistopic_obj = dill.load(open('~{cistopic_file}', 'rb'))
-        #menr = dill.load(open('~{menr_file}', 'rb')) 
-
-        #create scenic plus object
-        #from scenicplus.scenicplus_class import create_SCENICPLUS_object
-
-        #scplus_obj = create_SCENICPLUS_object(
-        #    GEX_anndata = adata.raw.to_adata(),
-        #    cisTopic_obj = cistopic_obj,
-        #    menr = menr,
-        #    bc_transform_func = lambda x: f'{x}___cisTopic'
-        #)
-
         print("opening scenic plus object")
         scplus_obj = dill.load(open('~{scplus_obj_file}', 'rb'))
         print("opened scenic plus object")
