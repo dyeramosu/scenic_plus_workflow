@@ -3,7 +3,7 @@ version 1.0
 workflow SCENIC_PLUS {
     call scenic_plus
 
-    output {
+    output { 
         File scenic_plus_output = scenic_plus.scenic_plus_output
     }
 }
