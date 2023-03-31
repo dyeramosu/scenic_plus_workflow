@@ -14,10 +14,11 @@ task scenic_plus {
         File tf_file
         String biomart_host
 
-        File adata_file
-        File cistopic_file
-        File menr_file
+        #File adata_file
+        #File cistopic_file
+        #File menr_file
         File bedToBigBed_file
+        File scplus_obj_file
 
         Int cpu = 24
         Int memory = 256
@@ -51,19 +52,24 @@ task scenic_plus {
         null = open(os.devnull,'wb')
 
         #get input objects
-        adata = sc.read_h5ad('~{adata_file}')
-        cistopic_obj = dill.load(open('~{cistopic_file}', 'rb'))
-        menr = dill.load(open('~{menr_file}', 'rb')) 
+        #adata = sc.read_h5ad('~{adata_file}')
+        #cistopic_obj = dill.load(open('~{cistopic_file}', 'rb'))
+        #menr = dill.load(open('~{menr_file}', 'rb')) 
 
         #create scenic plus object
-        from scenicplus.scenicplus_class import create_SCENICPLUS_object
+        #from scenicplus.scenicplus_class import create_SCENICPLUS_object
 
-        scplus_obj = create_SCENICPLUS_object(
-            GEX_anndata = adata.raw.to_adata(),
-            cisTopic_obj = cistopic_obj,
-            menr = menr,
-            bc_transform_func = lambda x: f'{x}___cisTopic'
-        )
+        #scplus_obj = create_SCENICPLUS_object(
+        #    GEX_anndata = adata.raw.to_adata(),
+        #    cisTopic_obj = cistopic_obj,
+        #    menr = menr,
+        #    bc_transform_func = lambda x: f'{x}___cisTopic'
+        #)
+
+        print("opening scenic plus object")
+        scplus_obj = dill.load(open('~{scplus_obj_file}', 'rb'))
+        print("opened scenic plus object")
+        
         scplus_obj.X_EXP = np.array(scplus_obj.X_EXP.todense())
         scplus_obj.dr_cell['GEX_X_pca'] = scplus_obj.dr_cell['GEX_X_pca'].iloc[:, 0:2]
 
