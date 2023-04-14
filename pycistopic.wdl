@@ -1,18 +1,20 @@
 version 1.0
 
 workflow cisTopic {
-    call create_pycistopic_object
+    
+    call run_pycistopic
 
     output {
-        File pycistopic_output = create_pycistopic_object.create_pycistopic_output
+        File pycistopic_output = run_pycistopic.pycistopic_object
     }
 }
 
-task create_pycistopic_object {
+task run_pycistopic {
     input {
         String output_dir # gbucket
         File atac_data_og_file
         File adata_file
+        File mallet_file
 
         Int cpu = 24
         Int memory = 256
@@ -58,8 +60,40 @@ task create_pycistopic_object {
 
     # save cisTopic object
     pickle.dump(cisTopic_obj,
-                open(os.path.join('pycistopic_output_wdl', 'cistopic_obj.pkl'), 'wb'))
+                open(os.path.join('pycistopic_output_wdl', 'cistopic_obj_pre_models.pkl'), 'wb'))
     
+    # RUN MODELS
+    models=run_cgs_models_mallet('~{mallet_file}',
+                    cisTopic_obj,
+                    n_topics=list(range(3, 75, 3)),
+                    n_cpu=24,
+                    n_iter=500, 
+                    random_state=555,
+                    alpha=50,
+                    alpha_by_topic=True,
+                    eta=0.1,
+                    eta_by_topic=False,
+                    tmp_path=tmp, #Use SCRATCH if many models or big data set
+                    save_path=None)
+    
+    # save models
+    pickle.dump(models, 
+                open(os.path.join('pycistopic_output_wdl', 'PDAC_500_iter_LDA_3_75.pkl'), 'wb'))
+    
+    # evaluate models
+    model=evaluate_models(models,
+                     select_model=None, 
+                     return_model=True, 
+                     metrics=['Arun_2010','Cao_Juan_2009', 'Minmo_2011', 'loglikelihood'],
+                     plot_metrics=False)
+    
+    # add model to cistopic object
+    cisTopic_obj.add_LDA_model(model)
+
+    # save cisTopic object
+    pickle.dump(cisTopic_obj,
+                open(os.path.join('pycistopic_output_wdl', 'cistopic_obj.pkl'), 'wb'))
+   
     CODE
 
     tar -czvf pycistopic_output.tar.gz pycistopic_output_wdl
@@ -68,7 +102,7 @@ task create_pycistopic_object {
     >>>
 
     output {
-        File create_pycistopic_output = 'pycistopic_output.tar.gz'
+        File pycistopic_object = 'pycistopic_output.tar.gz'
     }
 
     runtime {
