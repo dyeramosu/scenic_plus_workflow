@@ -5,16 +5,16 @@ workflows:
     name: scenicplus-wdl
     authors:
       - name: Deepika Yeramosu
-        email: deepikayeramosu@gmail.com
+        email: dyeramos@broadinstitute.org
   - subclass: WDL
     primaryDescriptorPath: /pycistopic.wdl
     name: pycistopic-wdl
     authors:
      - name: Deepika Yeramosu
-       email: deepikayeramosu@gmail.com
+       email: dyeramos@broadinstitute.org
   - subclass: WDL
     primaryDescriptorPath: /pycistarget.wdl
     name: pycistarget-wdl
     authors:
       - name: Deepika Yeramosu
-        email: deepikayeramosu@gmail.com
+        email: dyeramos@broadinstitute.org
