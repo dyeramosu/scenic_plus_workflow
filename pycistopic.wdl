@@ -13,6 +13,12 @@ task create_pycistopic_object {
         String output_dir # gbucket
         File atac_data_og_file
         File adata_file
+
+        Int cpu = 24
+        Int memory = 256
+        String docker = "dyeramosu/scenic_plus_terra:latest"
+        Int preemptible = 0
+        Int disk_space = 128
     }
 
     command <<<
@@ -66,6 +72,11 @@ task create_pycistopic_object {
     }
 
     runtime {
-
+        docker: docker
+        memory: memory + "G"
+        bootDiskSizeGb: 12
+        disks: "local-disk " + disk_space + " HDD"
+        cpu: cpu
+        preemptible: preemptible
     }
 }
