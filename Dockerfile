@@ -27,13 +27,24 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN python -m pip install --upgrade pip --no-cache-dir && \
     python -m pip install scanpy pandas numpy scipy dill pyranges --no-cache-dir
 
-RUN wget https://github.com/macs3-project/MACS/archive/refs/tags/v2.2.7.1.tar.gz -O MACS.tar.gz && \
+# install dependencies:
+## install Mallet (https://github.com/mimno/Mallet)
+RUN apt update
+RUN apt-get install -y --no-install-recommends ant openjdk-11-jdk && \
+    git clone --depth=1 https://github.com/mimno/Mallet.git /tmp/Mallet && \
+    cd /tmp/Mallet && \
+    ant && \
+    cd ../..
+
+## install MACS2
+RUN wget https://github.com/macs3-project/MACS/archive/refs/tags/v2.2.7.1.tar.gz -O MACS.tar.gz && \ 
     tar -xvf MACS.tar.gz && \
     cd MACS-2.2.7.1 && \
     sed -i 's/install_requires = \[f"numpy>={numpy_requires}",\]/install_requires = \[f"numpy{numpy_requires}",\]/' setup.py && \
     pip install -e . && \
-    cd ..
-    
+    cd .. 
+
+## install SCENIC+
 RUN git clone https://github.com/aertslab/scenicplus && \
     pip install wheel cmake && \
     pip install leidenalg --upgrade && \

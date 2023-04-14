@@ -1,117 +1,71 @@
 version 1.0
 
-workflow pycisTopic {
-    input {
-    	String mallet_directory
-        String cisTopic_obj_directory
-        String tmp_directory
-        String output_directory
+workflow cisTopic {
+    call create_pycistopic_object
 
-        Array[Int] k_range = [3, 6, 9, 12]
-        Int num_iter = 500
-        Int seed = 555
-        Int alpha = 50
-        Boolean alpha_by_topic = true 
-        Float eta = 0.1 
-        Boolean eta_by_topic = false 
-       
-        #general parameters
-        Int cpu = 8
-        String memory = "64G"
-        Int extra_disk_space = 0
-        String docker = "mparikhbroad/cnmf:latest" # CHANGE
-        Int preemptible = 0
-    }
-
-    # String output_directory_stripped = sub(output_directory, "/+$", "")
-
-    call run_models {
-            input:
-                mallet_directory,
-                cisTopic_obj_directory,
-                tmp_directory,
-                output_directory,
-                
-                k_range,
-                num_iter,
-                seed,
-                alpha,
-                alpha_by_topic,
-                eta,
-                eta_by_topic,
-
-                cpu=cpu,
-                memory=memory,
-                extra_disk_space=extra_disk_space,
-                docker=docker,
-                preemptible=preemptible
-        }
-    
     output {
-        File models = run_models.models
+        File pycistopic_output = create_pycistopic_object.create_pycistopic_output
     }
 }
 
-task run_models {
-
+task create_pycistopic_object {
     input {
-        String mallet_directory
-        String cisTopic_obj_directory
-        String tmp_directory
-        String output_directory
-
-        Array[Int] k_range
-        Int num_iter
-        Int seed
-        Int alpha
-        Boolean alpha_by_topic
-        Float eta 
-        Boolean eta_by_topic
-        
-        String memory
-        Int extra_disk_space
-        Int cpu
-        String docker
-        Int preemptible
+        String output_dir # gbucket
+        File atac_data_og_file
+        File adata_file
     }
 
     command <<<
-        source activate cnmf_env
-        set -e
+    set -e 
 
-        mkdir -p outputs
+    mkdir tmp
+    mkdir pycistopic_output_wdl
 
-        python <<CODE
-        LDA_script = 'run_LDA.py'
+    python << CODE
+    # imports
+    import os
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    import scanpy as sc
+    import pickle
+    from pycisTopic.cistopic_class import *
 
-        output_directory = 'outputs/'
-        if not os.path.exists(output_directory):
-            os.mkdir(output_directory)
-        run_name = 'LDA_run'
+    # read input h5ad files
+    atac_data_og = sc.read_h5ad('~{atac_data_og_file}')
+    adata_og = sc.read_h5ad('~{adata_file}')
+    
+    # subset atacseq and rnaseq data to cells that are in both
+    overlap = list(set(atac_data_og.obs.index.to_list()) & set(adata_og.obs.index.to_list()))
+    adata = adata_og[adata_og.obs.index.isin(overlap)]
+    atac_data = atac_data_og[atac_data_og.obs.index.isin(overlap)]
 
-        prepare_cmd = ['python', cNMF_script, 'prepare', '--output-dir', output_directory, '--name', run_name, '-c', countfn, '-k', *k_range_array, '--n-iter', str(numiter), '--total-workers', str(numworkers), '--seed', str(seed), '--numgenes', str(numhvgenes), '--beta-loss', 'frobenius']
-        print(' '.join(prepare_cmd), flush=True)
-        check_call(prepare_cmd)
-        CODE
-        
-        tar -zcf outputs.tar.gz outputs/cnmf_run
-        
-        tar -zcf cnmf.tar.gz outputs/cnmf_run
-        rm -rf outputs/cnmf_run/cnmf_tmp
-        gsutil -m rsync -r outputs/cnmf_run ~{output_dir}
+    # create cisTopic object
+    cell_data = adata.obs
+    count_array = atac_data.X.toarray()
+    count_df = pd.DataFrame(data=count_array, index=atac_data.obs_names, columns=atac_data.var_names)
+    count_df = count_df.transpose()
+
+    cisTopic_obj = create_cistopic_object(count_df)
+    # add cell information 
+    cisTopic_obj.add_cell_data(cell_data)
+
+    # save cisTopic object
+    pickle.dump(cisTopic_obj,
+                open(os.path.join('pycistopic_output_wdl', 'cistopic_obj.pkl'), 'wb'))
+    
+    CODE
+
+    tar -czvf pycistopic_output.tar.gz pycistopic_output_wdl
+    gsutil rsync -r pycistopic_output_wdl ~{output_dir}
+
     >>>
 
     output {
-        File preparation_tar = 'outputs.tar.gz'
+        File create_pycistopic_output = 'pycistopic_output.tar.gz'
     }
 
     runtime {
-        docker: docker
-        memory: memory
-        bootDiskSizeGb: 12
-        disks: "local-disk " + ceil(size(adata_file, "GB")*4 + extra_disk_space) + " HDD"
-        cpu: cpu
-        preemptible: preemptible
-    }
 
+    }
 }
