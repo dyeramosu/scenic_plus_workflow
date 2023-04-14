@@ -1,20 +1,21 @@
 version: 1.2
+
 workflows:
-  - subclass: WDL
+  - name: scenicplus-wdl
+    subclass: WDL
     primaryDescriptorPath: /scenicplus.wdl
-    name: scenicplus-wdl
     authors:
       - name: Deepika Yeramosu
         email: dyeramos@broadinstitute.org
-  - subclass: WDL
+  - name: pycistopic-wdl
+    subclass: WDL
     primaryDescriptorPath: /pycistopic.wdl
-    name: pycistopic-wdl
     authors:
      - name: Deepika Yeramosu
        email: dyeramos@broadinstitute.org
-  - subclass: WDL
+  - name: pycistarget-wdl
+    subclass: WDL
     primaryDescriptorPath: /pycistarget.wdl
-    name: pycistarget-wdl
     authors:
       - name: Deepika Yeramosu
         email: dyeramos@broadinstitute.org
