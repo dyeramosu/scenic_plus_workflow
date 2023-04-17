@@ -34,7 +34,9 @@ RUN apt-get install -y --no-install-recommends ant openjdk-11-jdk && \
     git clone --depth=1 https://github.com/mimno/Mallet.git /tmp/Mallet && \
     cd /tmp/Mallet && \
     ant && \
-    cd ../..
+    cd bin && \
+    sed -i 's/MEMORY="${MALLET_MEMORY:-1g}"/MEMORY=10g/g' mallet && \
+    cd 
 
 ## install MACS2
 RUN wget https://github.com/macs3-project/MACS/archive/refs/tags/v2.2.7.1.tar.gz -O MACS.tar.gz && \ 

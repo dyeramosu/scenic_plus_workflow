@@ -61,6 +61,7 @@ task run_pycistopic {
     pickle.dump(cisTopic_obj,
                 open(os.path.join('pycistopic_output_wdl', 'cistopic_obj_pre_models.pkl'), 'wb'))
     
+    
     # RUN MODELS
     models=run_cgs_models_mallet('/tmp/Mallet/bin/mallet',
                     cisTopic_obj,
@@ -92,7 +93,60 @@ task run_pycistopic {
     # save cisTopic object
     pickle.dump(cisTopic_obj,
                 open(os.path.join('pycistopic_output_wdl', 'cistopic_obj.pkl'), 'wb'))
+
+    
+    # use cell-topic probabilities to generate dimensionality reductions
+    from pycisTopic.clust_vis import *
+    run_umap(cisTopic_obj, target  = 'cell', scale=True)
    
+    
+    # topic binarization
+    from pycisTopic.topic_binarization import *
+    ## binarize topic-region distributions
+    region_bin_topics = binarize_topics(cisTopic_obj, method='otsu', ntop=3000, plot=False)
+    ## binarize cell-topic distributions
+    binarized_cell_topic = binarize_topics(cisTopic_obj, target='cell', method='li', plot=False)
+
+    ## save 
+    with open(os.path.join('pycistopic_output_wdl' + 'binarized_cell_topic.pkl'), 'wb') as f:
+        pickle.dump(binarized_cell_topic, f)
+    with open(os.path.join('pycistopic_output_wdl' + 'binarized_topic_region.pkl'), 'wb') as f:
+        pickle.dump(region_bin_topics, f)
+    
+    
+    # identify DARs
+    from pycisTopic.diff_features import *
+    ## impute the region accessibility exploting the cell-topic and topic-region probabilities
+    imputed_acc_obj = impute_accessibility(cisTopic_obj, selected_cells=None, selected_regions=None, scale_factor=10**6)
+    ## log-normalize the imputed data
+    normalized_imputed_acc_obj = normalize_scores(imputed_acc_obj, scale_factor=10**4)
+    ## identify highly variable regions (not mandatory but will speed up hypothesis testing for identifying DARs)
+    variable_regions = find_highly_variable_features(normalized_imputed_acc_obj,
+                                            min_disp = 0.05,
+                                            min_mean = 0.0125, 
+                                            max_mean = 3,
+                                            max_disp = np.inf,
+                                            n_bins=20, 
+                                            n_top_features=None,
+                                            plot=False)
+    
+    # Identify DARs between groups
+    markers_dict= find_diff_features(cisTopic_obj, 
+                                 imputed_acc_obj,
+                                 variable='states',
+                                 var_features=variable_regions,
+                                 contrasts=None,
+                                 adjpval_thr=0.05,
+                                 log2fc_thr=np.log2(1.5),
+                                 n_cpu=5,
+                                 split_pattern = '-') 
+    
+    ## save
+    with open(os.path.join('pycistopic_output_wdl' + 'Imputed_accessibility.pkl'), 'wb') as f:
+        pickle.dump(imputed_acc_obj, f)
+    with open(os.path.join('pycistopic_output_wdl' + 'DARs.pkl'), 'wb') as f:
+        pickle.dump(markers_dict, f)
+    
     CODE
 
     tar -czvf pycistopic_output.tar.gz pycistopic_output_wdl
