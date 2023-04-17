@@ -25,7 +25,7 @@ task run_pycistopic {
     command <<<
     set -e 
 
-    mkdir tmp
+    mkdir tmpdir
     mkdir pycistopic_output_wdl
 
     python << CODE
@@ -73,7 +73,7 @@ task run_pycistopic {
                     alpha_by_topic=True,
                     eta=0.1,
                     eta_by_topic=False,
-                    tmp_path='/tmp', #Use SCRATCH if many models or big data set
+                    tmp_path='tmpdir/', #Use SCRATCH if many models or big data set
                     save_path=None)
     
     # save models
