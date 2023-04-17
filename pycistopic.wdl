@@ -62,7 +62,7 @@ task run_pycistopic {
                 open(os.path.join('pycistopic_output_wdl', 'cistopic_obj_pre_models.pkl'), 'wb'))
     
     # RUN MODELS
-    models=run_cgs_models_mallet('mallet',
+    models=run_cgs_models_mallet('/tmp/Mallet/bin/mallet',
                     cisTopic_obj,
                     n_topics=list(range(3, 63, 3)),
                     n_cpu=24,
