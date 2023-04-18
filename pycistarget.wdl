@@ -41,8 +41,8 @@ task run_pycistarget {
         from pycisTopic.cistopic_class import *
 
         # load candidate enhancer regions
-        region_bin_topics = pickle.load('~{binarized_topic_region_file}', 'rb')
-        markers_dict = pickle.load('~{DARs_file}', 'rb')
+        region_bin_topics = pickle.load(open('~{binarized_topic_region_file}', 'rb'))
+        markers_dict = pickle.load(open('~{DARs_file}', 'rb'))
         
         markers_dict.pop('Unknown')
 

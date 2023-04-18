@@ -51,7 +51,7 @@ workflow cisTopic {
     }
 
     output {
-        File pycistopic_output = topic_binarization.diff_access_regions
+        File pycistopic_output = topic_binarization.DARs
     }
 }
 
@@ -155,7 +155,7 @@ task run_models_LDA {
         from pycisTopic.cistopic_class import *
 
         # get object
-        cistopic_obj = pickle.load('~{cistopic_obj_task1}', 'rb')
+        cistopic_obj = pickle.load(open('~{cistopic_obj_task1}', 'rb'))
 
         # RUN MODELS
         models=run_cgs_models_mallet('/tmp/Mallet/bin/mallet',
@@ -242,7 +242,7 @@ task topic_binarization {
         from pycisTopic.cistopic_class import *
 
         # get object
-        cistopic_obj = pickle.load('~{cistopic_obj_task2}', 'rb')   
+        cistopic_obj = pickle.load(open('~{cistopic_obj_task2}', 'rb'))   
         
         # topic binarization
         from pycisTopic.topic_binarization import *
@@ -299,7 +299,10 @@ task topic_binarization {
     >>>
 
     output {
-        File diff_access_regions = 'pycistopic_output_wdl/DARs.pkl'
+        File DARs = 'pycistopic_output_wdl/DARs.pkl'
+        File imputed_accessibility = 'pycistopic_output_wdl/Imputed_accessibility.pkl'
+        File binarized_cell_topics = 'pycistopic_output_wdl/binarized_cell_topic.pkl'
+        File binarized_topic_regions = 'pycistopic_output_wdl/binarized_topic_region.pkl'
     }
 
     runtime {
