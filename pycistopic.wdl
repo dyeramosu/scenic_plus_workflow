@@ -65,7 +65,7 @@ task run_pycistopic {
     # RUN MODELS
     models=run_cgs_models_mallet('/tmp/Mallet/bin/mallet',
                     cisTopic_obj,
-                    n_topics=list(range(51, 60, 3)),
+                    n_topics=list(range(54, 63, 3)),
                     n_cpu=24,
                     n_iter=500, 
                     random_state=555,
@@ -78,7 +78,7 @@ task run_pycistopic {
     
     # save models
     pickle.dump(models, 
-                open(os.path.join('pycistopic_output_wdl', 'PDAC_500_iter_LDA_51_60.pkl'), 'wb'))
+                open(os.path.join('pycistopic_output_wdl', 'PDAC_500_iter_LDA_54_63.pkl'), 'wb'))
     
     # evaluate models
     model=evaluate_models(models,
@@ -143,9 +143,9 @@ task run_pycistopic {
     
     ## save
     with open(os.path.join('pycistopic_output_wdl' + 'Imputed_accessibility.pkl'), 'wb') as f:
-        pickle.dump(imputed_acc_obj, f)
+        pickle.dump(imputed_acc_obj, f, protocol=4)
     with open(os.path.join('pycistopic_output_wdl' + 'DARs.pkl'), 'wb') as f:
-        pickle.dump(markers_dict, f)
+        pickle.dump(markers_dict, f, protocol=4)
     
     CODE
 
