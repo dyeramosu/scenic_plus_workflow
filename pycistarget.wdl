@@ -4,7 +4,7 @@ workflow cisTarget {
     call run_pycistarget
 
     output {
-
+        File pycistarget_output = run_pycistarget.pycistarget_object
     }
 }
 
@@ -96,7 +96,7 @@ task run_pycistarget {
     >>>
 
     output {
-
+        File pycistarget_object = 'pycistarget_output.tar.gz'
     }
 
     runtime {
