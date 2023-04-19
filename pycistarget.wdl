@@ -44,7 +44,9 @@ task run_pycistarget {
         region_bin_topics = pickle.load(open('~{binarized_topic_region_file}', 'rb'))
         markers_dict = pickle.load(open('~{DARs_file}', 'rb'))
         
-        markers_dict.pop('Unknown') # specific to PDAC
+        markers_dict.pop('Unknown')
+        markers_dict['DNA_repair_TNFa'] = markers_dict.pop('DNA repair / TNFa')
+        markers_dict['Oxidative_Phosphorylation'] = markers_dict.pop('Oxidative phosphorylation')
 
         # convert to dictionary of pyranges objects
         import pyranges as pr
@@ -91,6 +93,7 @@ task run_pycistarget {
        
         CODE
 
+        gsutil -m cp pycistarget_output_wdl/menr.pkl gs://fc-371bc8c3-78d6-4af4-886b-0d68f87bcc9c/PDAC_scenic_plus/workflow_outputs/
         tar -czvf pycistarget_output.tar.gz pycistarget_output_wdl
         gsutil rsync -r pycistarget_output_wdl ~{output_dir}
     >>>
