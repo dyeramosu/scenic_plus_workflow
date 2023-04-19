@@ -10,9 +10,9 @@ workflow cisTarget {
 
 task run_pycistarget {
     input {
-        String output_dir # gbucket
-        File binarized_topic_region_file
-        File DARs_file
+        String output_dir # gbucket (no / at end)
+        File binarized_topic_region_file # binarized_topic_region.pkl
+        File DARs_file # DARs.pkl
         File rankings_db_file # hg38_screen_v10_clust.regions_vs_motifs.rankings.feather
         File scores_db_file # hg38_screen_v10_clust.regions_vs_motifs.scores.feather
         File motif_annotation_file # motifs-v10nr_clust-nr.hgnc-m0.001-o0.0.tbl
@@ -44,7 +44,7 @@ task run_pycistarget {
         region_bin_topics = pickle.load(open('~{binarized_topic_region_file}', 'rb'))
         markers_dict = pickle.load(open('~{DARs_file}', 'rb'))
         
-        markers_dict.pop('Unknown')
+        markers_dict.pop('Unknown') # specific to PDAC
 
         # convert to dictionary of pyranges objects
         import pyranges as pr
