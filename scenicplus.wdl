@@ -179,7 +179,7 @@ task run_scenic_plus {
                 export_to_UCSC_file = True,
                 path_bedToBigBed = 'tmpdir/',
                 n_cpu = 24,
-                _temp_dir = 'tmpdir/')
+                _temp_dir = '/tmpdir/')
         except Exception as e:
             #in case of failure, still save the object
             dill.dump(scplus_obj, open(os.path.join('scenic_plus_output_wdl', 'scplus_obj.pkl'), 'wb'), protocol=-1)
