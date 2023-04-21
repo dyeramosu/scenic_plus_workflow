@@ -138,7 +138,7 @@ task run_scenic_plus {
     command <<<
         set -e
         mkdir tmpdir
-        echo pwd
+        echo $(pwd)
         mkdir scenic_plus_output_wdl
 
         wget -O tmpdir/bedToBigBed http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed
