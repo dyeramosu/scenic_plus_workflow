@@ -173,7 +173,7 @@ task run_models_LDA {
         
         # save models
         pickle.dump(models, 
-                    open(os.path.join('pycistopic_output_wdl', 'PDAC_500_iter_LDA_3_75.pkl'), 'wb'))
+                    open(os.path.join('pycistopic_output_wdl', 'PDAC_500_iter_LDA_3_90.pkl'), 'wb'))
         
         # evaluate models
         model=evaluate_models(models,
@@ -195,7 +195,7 @@ task run_models_LDA {
         
         CODE
 
-        gsutil -m cp pycistopic_output_wdl/PDAC_500_iter_LDA_54_63.pkl ~{output_dir}
+        gsutil -m cp pycistopic_output_wdl/PDAC_500_iter_LDA_3_90.pkl ~{output_dir}
         gsutil -m cp pycistopic_output_wdl/cistopic_obj_plus_model.pkl ~{output_dir}
     >>>
 
