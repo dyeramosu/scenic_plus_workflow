@@ -198,7 +198,7 @@ task run_scenic_plus {
     runtime {
         docker: docker
         memory: memory + "G"
-        bootDiskSizeGb: 50
+        bootDiskSizeGb: 100
         disks: "local-disk " + disk_space + " HDD"
         cpu: cpu
         preemptible: preemptible
