@@ -19,7 +19,7 @@ task run_pycistarget {
 
         Int cpu = 24
         Int memory = 256
-        String docker = "dyeramosu/scenic_plus_terra:latest"
+        String docker = "dyeramosu/scenic_plus_terra:1.0.0"
         Int preemptible = 0
         Int disk_space = 128
     }
@@ -93,7 +93,7 @@ task run_pycistarget {
        
         CODE
 
-        gsutil -m cp pycistarget_output_wdl/menr.pkl gs://fc-371bc8c3-78d6-4af4-886b-0d68f87bcc9c/PDAC_scenic_plus/workflow_outputs/
+        gsutil -m cp pycistarget_output_wdl/menr.pkl ~{output_dir}
         tar -czvf pycistarget_output.tar.gz pycistarget_output_wdl
         gsutil rsync -r pycistarget_output_wdl ~{output_dir}
     >>>
