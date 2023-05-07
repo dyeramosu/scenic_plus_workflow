@@ -291,22 +291,22 @@ task run_scenic_plus {
         from scenicplus.scenicplus_class import SCENICPLUS
 
         mdata = mudata.read_h5mu(os.path.join('scenic_plus_output_wdl', 'mudata.h5mu'))
-        menr = menr = dill.load(open('~{menr_file}', 'rb'))
+        menr = dill.load(open('~{menr_file}', 'rb'))
 
         scplus_obj2 = SCENICPLUS(
-        X_ACC = mdata['ACC'].X.T,
-        X_EXP = mdata['EXP'].X,
-        metadata_regions = mdata['ACC'].var,
-        metadata_genes = mdata['EXP'].var,
-        metadata_cell = mdata.obs,
-        menr = menr ,
-        dr_cell = {k: dict(mdata.obsm)[k] for k in dict(mdata.obsm).keys() if k not in mdata.mod.keys()},
-        dr_region = {},
-        uns = mdata.uns)
+            X_ACC = mdata['ACC'].X.T,
+            X_EXP = mdata['EXP'].X,
+            metadata_regions = mdata['ACC'].var,
+            metadata_genes = mdata['EXP'].var,
+            metadata_cell = mdata.obs,
+            menr = menr ,
+            dr_cell = {k: dict(mdata.obsm)[k] for k in dict(mdata.obsm).keys() if k not in mdata.mod.keys()},
+            dr_region = {},
+            uns = mdata.uns)
 
         scplus_obj2.uns['eRegulon_AUC'] = {
-        'Gene_based': mdata['AUC_target_genes'].to_df(),
-        'Region_based': mdata['AUC_target_regions'].to_df()
+            'Gene_based': mdata['AUC_target_genes'].to_df(),
+            'Region_based': mdata['AUC_target_regions'].to_df()
         }
 
         # save pickled object
