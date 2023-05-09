@@ -103,7 +103,7 @@ task run_get_gene_activity {
                       adjpval_thr=0.05,
                       log2fc_thr=np.log2(1.5),
                       n_cpu=5,
-                      _temp_dir=tmpDir + 'ray_spill',
+                      _temp_dir=os.path.abspath("tmpdir/"),
                       split_pattern = '-')
         
         # SAVE
