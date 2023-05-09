@@ -97,7 +97,7 @@ task run_get_gene_activity {
         # INFER DAGs 
         markers_dict = find_diff_features(cistopic_obj,
                       gene_act,
-                      variable='Seurat_cell_type',
+                      variable='states',
                       var_features=None,
                       contrasts=None,
                       adjpval_thr=0.05,
