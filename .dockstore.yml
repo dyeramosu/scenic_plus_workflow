@@ -19,3 +19,9 @@ workflows:
     authors:
       - name: Deepika Yeramosu
         email: dyeramos@broadinstitute.org
+  - name: geneactivityscores-wdl
+    subclass: WDL
+    primaryDescriptorPath: /geneactivityscores.wdl
+    authors:
+      - name: Deepika Yeramosu
+        email: dyeramos@broadinstitute.org
