@@ -285,7 +285,7 @@ task run_scenic_plus {
         # save mudata object
         x.write(os.path.join('scenic_plus_output_wdl', 'mudata.h5mu'))
 
-        '''
+        
         # pickle mudata
         import mudata
         import pickle
@@ -311,12 +311,12 @@ task run_scenic_plus {
         }
 
         # save pickled object
-        dill.dump(scplus_obj2, open(os.path.join('scenic_plus_output_wdl', 'scplus_obj2.pkl'), 'wb'))
-        '''
+        dill.dump(scplus_obj2, open(os.path.join('scenic_plus_output_wdl', 'scplus_obj2.pkl'), 'wb'), protocol=4)
+        
 
         CODE
 
-        #gsutil -m cp scenic_plus_output_wdl/scplus_obj2.pkl ~{output_dir}
+        gsutil -m cp scenic_plus_output_wdl/scplus_obj2.pkl ~{output_dir}
         gsutil -m cp scenic_plus_output_wdl/mudata.h5mu ~{output_dir}
     >>>
 
