@@ -2,7 +2,7 @@ version 1.0
 
 workflow SCENIC_PLUS {
     input {
-        String output_dir # gbucket (make sure to add / to end)
+        String output_dir # gbucket (no / at end)
 
         # runtime
         Int cpu = 24
@@ -316,12 +316,15 @@ task run_scenic_plus {
 
         CODE
 
-        gsutil -m cp scenic_plus_output_wdl/scplus_obj2.pkl ~{output_dir}
-        gsutil -m cp scenic_plus_output_wdl/mudata.h5mu ~{output_dir}
+        #gsutil -m cp scenic_plus_output_wdl/scplus_obj2.pkl ~{output_dir}
+        #gsutil -m cp scenic_plus_output_wdl/mudata.h5mu ~{output_dir}
+        
+        tar -czvf scenic_plus_output.tar.gz scenic_plus_output_wdl
+        gsutil rsync -r scenic_plus_output_wdl ~{output_dir}
     >>>
 
     output {
-        File scenic_plus_object = 'scenic_plus_output_wdl/mudata.h5mu'
+        File scenic_plus_object = 'scenic_plus_output.tar.gz'
     }
 
     runtime {
