@@ -25,3 +25,10 @@ workflows:
     authors:
       - name: Deepika Yeramosu
         email: dyeramos@broadinstitute.org
+  - name: downstream_scenic_analysis-wdl
+    subclass: WDL
+    primaryDescriptorPath: /downstream_scenic_analysis.wdl
+    authors:
+      - name: Deepika Yeramosu
+        email: dyeramos@broadinstitute.org
+  
