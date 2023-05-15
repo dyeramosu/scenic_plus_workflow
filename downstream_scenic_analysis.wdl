@@ -80,6 +80,7 @@ task run_filter_scplus {
             reduction_name = 'eRegulons_tSNE', #overwrite previously calculated tSNE
         )
 
+        '''
         # generate pseudobulk gene expression and region accessibility data, per celltype
         from scenicplus.cistromes import TF_cistrome_correlation, generate_pseudobulks
 
@@ -108,6 +109,7 @@ task run_filter_scplus {
                     auc_key = 'eRegulon_AUC_filtered',
                     signature_key = 'Region_based',
                     out_key = 'filtered_region_based')
+        '''
         
         # save new scplus object
         dill.dump(scplus_obj, open(os.path.join('downstream_scenicplus_output_wdl', 'filtered_scplus_obj.pkl'), 'wb'), protocol=-1)
