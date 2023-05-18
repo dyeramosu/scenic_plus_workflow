@@ -181,7 +181,7 @@ task run_filter_scplus {
         eregulon_correlation(scplus_obj)
 
         thresholds = {
-            'rho': [-0.75, 0.70],
+            'rho': [0.05, 0.61],
             'n_targets': 0
         }
 
