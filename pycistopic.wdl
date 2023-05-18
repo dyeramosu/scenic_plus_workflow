@@ -11,8 +11,8 @@ workflow cisTopic {
 
         String output_dir # gbucket (make sure to add / to end)
 
-        File atac_data_og_file
-        File adata_file
+        File atac_data_og_file # barcoding-multiome-atac_for-Deepika.h5ad
+        File adata_file # scenicplus_modified_gem.h5ad
     }
     
     call create_pycistopic_object {
