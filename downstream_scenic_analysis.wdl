@@ -38,6 +38,7 @@ task run_filter_scplus {
         import pickle
         import dill
         from pycisTopic.cistopic_class import *
+        import scipy.stats as st
 
         # load scenic plus object
         scplus_obj = dill.load(open('~{scplus_obj_file}', 'rb'))
