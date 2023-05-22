@@ -44,9 +44,9 @@ task run_pycistarget {
         region_bin_topics = pickle.load(open('~{binarized_topic_region_file}', 'rb'))
         markers_dict = pickle.load(open('~{DARs_file}', 'rb'))
         
-        markers_dict.pop('Unknown')
-        markers_dict['DNA_repair_TNFa'] = markers_dict.pop('DNA repair / TNFa')
-        markers_dict['Oxidative_Phosphorylation'] = markers_dict.pop('Oxidative phosphorylation')
+        #markers_dict.pop('Unknown')
+        #markers_dict['DNA_repair_TNFa'] = markers_dict.pop('DNA repair / TNFa')
+        #markers_dict['Oxidative_Phosphorylation'] = markers_dict.pop('Oxidative phosphorylation')
 
         # convert to dictionary of pyranges objects
         import pyranges as pr
