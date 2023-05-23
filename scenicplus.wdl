@@ -268,7 +268,7 @@ task run_scenic_plus {
                 biomart_host = 'http://sep2019.archive.ensembl.org/',
                 upstream = [1000, 150000],
                 downstream = [1000, 150000],
-                calculate_TF_eGRN_correlation = False,
+                calculate_TF_eGRN_correlation = True,
                 calculate_DEGs_DARs = True,
                 export_to_loom_file = True,
                 export_to_UCSC_file = True,
