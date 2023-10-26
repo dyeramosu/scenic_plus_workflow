@@ -160,7 +160,7 @@ task run_models_LDA {
         # RUN MODELS
         models=run_cgs_models_mallet('/tmp/Mallet/bin/mallet',
                         cistopic_obj,
-                        n_topics=list(range(5, 90, 5)),
+                        n_topics=list(range(5, 15, 5)),
                         n_cpu=24,
                         n_iter=500, 
                         random_state=555,
@@ -173,7 +173,7 @@ task run_models_LDA {
         
         # save models
         pickle.dump(models, 
-                    open(os.path.join('pycistopic_output_wdl', 'PDAC_500_iter_LDA_5_90.pkl'), 'wb'))
+                    open(os.path.join('pycistopic_output_wdl', 'PDAC_500_iter_LDA_5_15.pkl'), 'wb'))
         
         # evaluate models
         model=evaluate_models(models,
@@ -195,7 +195,7 @@ task run_models_LDA {
         
         CODE
 
-        gsutil -m cp pycistopic_output_wdl/PDAC_500_iter_LDA_5_80.pkl ~{output_dir}
+        gsutil -m cp pycistopic_output_wdl/PDAC_500_iter_LDA_5_15.pkl ~{output_dir}
         gsutil -m cp pycistopic_output_wdl/cistopic_obj_plus_model.pkl ~{output_dir}
     >>>
 
