@@ -85,13 +85,13 @@ task create_pycistopic_object {
         from pycisTopic.cistopic_class import *
 
         # read input h5ad files
-        atac_data_og = sc.read_h5ad('~{atac_data_og_file}')
-        adata_og = sc.read_h5ad('~{adata_file}')
+        atac_data = sc.read_h5ad('~{atac_data_og_file}')
+        adata = sc.read_h5ad('~{adata_file}')
         
         # subset atacseq and rnaseq data to cells that are in both
-        overlap = list(set(atac_data_og.obs.index.to_list()) & set(adata_og.obs.index.to_list()))
-        adata = adata_og[adata_og.obs.index.isin(overlap)]
-        atac_data = atac_data_og[atac_data_og.obs.index.isin(overlap)]
+        #overlap = list(set(atac_data_og.obs.index.to_list()) & set(adata_og.obs.index.to_list()))
+        #adata = adata_og[adata_og.obs.index.isin(overlap)]
+        #atac_data = atac_data_og[atac_data_og.obs.index.isin(overlap)]
 
         # create cisTopic object
         cell_data = adata.obs
@@ -160,7 +160,7 @@ task run_models_LDA {
         # RUN MODELS
         models=run_cgs_models_mallet('/tmp/Mallet/bin/mallet',
                         cistopic_obj,
-                        n_topics=list(range(5, 80, 5)),
+                        n_topics=list(range(5, 90, 5)),
                         n_cpu=24,
                         n_iter=500, 
                         random_state=555,
@@ -173,7 +173,7 @@ task run_models_LDA {
         
         # save models
         pickle.dump(models, 
-                    open(os.path.join('pycistopic_output_wdl', 'PDAC_500_iter_LDA_5_80.pkl'), 'wb'))
+                    open(os.path.join('pycistopic_output_wdl', 'PDAC_500_iter_LDA_5_90.pkl'), 'wb'))
         
         # evaluate models
         model=evaluate_models(models,
