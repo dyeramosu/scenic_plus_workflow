@@ -39,17 +39,19 @@ RUN apt-get install -y --no-install-recommends ant openjdk-11-jdk && \
     cd 
 
 ## install MACS2
-RUN wget https://github.com/macs3-project/MACS/archive/refs/tags/v2.2.7.1.tar.gz -O MACS.tar.gz && \ 
-    tar -xvf MACS.tar.gz && \
-    cd MACS-2.2.7.1 && \
-    sed -i 's/install_requires = \[f"numpy>={numpy_requires}",\]/install_requires = \[f"numpy{numpy_requires}",\]/' setup.py && \
-    pip install -e . && \
-    cd .. 
+# RUN wget https://github.com/macs3-project/MACS/archive/refs/tags/v2.2.7.1.tar.gz -O MACS.tar.gz && \ 
+#     tar -xvf MACS.tar.gz && \
+#     cd MACS-2.2.7.1 && \
+#     sed -i 's/install_requires = \[f"numpy>={numpy_requires}",\]/install_requires = \[f"numpy{numpy_requires}",\]/' setup.py && \
+#     pip install -e . && \
+#     cd .. 
 
 ## install SCENIC+
 RUN git clone https://github.com/aertslab/scenicplus && \
-    pip install wheel cmake && \
-    pip install leidenalg --upgrade && \
-    pip install scenicplus/ && \
-    rm -rf scenicplus/ && \
-    rm -rf MACS-2.2.7.1/
+    #pip install wheel cmake && \
+    #pip install leidenalg --upgrade && \
+    #pip install scenicplus/ && \
+    #rm -rf scenicplus/ && \
+    #rm -rf MACS-2.2.7.1/
+    cd scenicplus && \
+    pip install -e .
