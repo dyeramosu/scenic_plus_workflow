@@ -5,7 +5,7 @@ workflow cisTopic {
     input {
         Int cpu = 24
         Int memory = 256
-        String docker = "dyeramosu/scenic_plus_terra:1.0.0"
+        String docker = "dyeramosu/scenic_plus_terra:1.0.2"
         Int preemptible = 0
         Int disk_space = 128
 
@@ -160,7 +160,7 @@ task run_models_LDA {
         # RUN MODELS
         models=run_cgs_models_mallet('/tmp/Mallet/bin/mallet',
                         cistopic_obj,
-                        n_topics=list(range(5, 15, 5)),
+                        n_topics=list(range(3, 60, 3)),
                         n_cpu=24,
                         n_iter=500, 
                         random_state=555,
@@ -173,7 +173,7 @@ task run_models_LDA {
         
         # save models
         pickle.dump(models, 
-                    open(os.path.join('pycistopic_output_wdl', 'PDAC_500_iter_LDA_5_15.pkl'), 'wb'))
+                    open(os.path.join('pycistopic_output_wdl', 'PDAC_500_iter_LDA_3_60.pkl'), 'wb'))
         
         # evaluate models
         model=evaluate_models(models,
@@ -195,7 +195,7 @@ task run_models_LDA {
         
         CODE
 
-        gsutil -m cp pycistopic_output_wdl/PDAC_500_iter_LDA_5_15.pkl ~{output_dir}
+        gsutil -m cp pycistopic_output_wdl/PDAC_500_iter_LDA_3_60.pkl ~{output_dir}
         gsutil -m cp pycistopic_output_wdl/cistopic_obj_plus_model.pkl ~{output_dir}
     >>>
 
