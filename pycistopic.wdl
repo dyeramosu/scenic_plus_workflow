@@ -5,7 +5,7 @@ workflow cisTopic {
     input {
         Int cpu = 24
         Int memory = 256
-        String docker = "dyeramosu/scenic_plus_terra:1.0.2"
+        String docker = "dyeramosu/scenic_plus_terra:1.0.0"
         Int preemptible = 0
         Int disk_space = 128
 
